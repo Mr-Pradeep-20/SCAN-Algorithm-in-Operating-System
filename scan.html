@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAN Disk Scheduling Visualizer</title>
+    <link rel="stylesheet" href="scan.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SCAN Disk Scheduling</h1>
+
+        <div class="input-section">
+            <h2>Inputs</h2>
+            <div class="input-grid">
+                <div>
+                    <label for="initialHead">Initial Head Position:</label>
+                    <input type="number" id="initialHead" value="50" min="0">
+                </div>
+                <div>
+                    <label for="maxCylinder">Max Cylinder (Disk Size):</label>
+                    <input type="number" id="maxCylinder" value="199" min="1">
+                </div>
+                <div>
+                    <label for="direction">Initial Direction:</label>
+                    <select id="direction">
+                        <option value="RIGHT">Towards Higher Cylinders (Right)</option>
+                        <option value="LEFT">Towards Lower Cylinders (Left)</option>
+                    </select>
+                </div>
+            </div>
+            <form id="addRequestForm">
+                <div>
+                    <label for="requestCylinder">Request Cylinder:</label>
+                    <input type="number" id="requestCylinder" min="0" required>
+                    <button type="submit">Add Request</button>
+                </div>
+            </form>
+            <button type="button" id="resetRequests">Reset All</button>
+        </div>
+
+        <div class="queue-display">
+            <h2>Request Queue</h2>
+            <ul id="requestList">
+                <!-- Requests will be added here -->
+            </ul>
+            <button id="runSCAN" disabled>Run SCAN</button>
+        </div>
+
+        <div class="visualization-section">
+            <h2>Disk Arm Movement</h2>
+            <div class="disk-track-container">
+                <div id="diskTrack">
+                    <!-- Disk head and request markers will be here -->
+                    <div id="diskHead"></div>
+                </div>
+                <div id="cylinderLabels">
+                    <!-- Cylinder numbers will be here -->
+                </div>
+            </div>
+            <p id="currentAction">Status: Idle</p>
+        </div>
+
+        <div class="results-section">
+            <h2>Results</h2>
+            <p>Serviced Order: <span id="servicedOrder">N/A</span></p>
+            <p>Total Head Movement: <span id="totalHeadMovement">N/A</span></p>
+            <div id="movementLog">
+                <h3>Movement Log:</h3>
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scan.js"></script>
+</body>
+</html>

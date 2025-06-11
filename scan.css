@@ -1,0 +1,227 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    max-width: 1200px;
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+h1 { color: #1877f2; } /* Facebook Blue-ish */
+
+/* Input & Queue Sections */
+.input-section, .queue-display, .visualization-section, .results-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.input-grid div, #addRequestForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="number"], select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+button {
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 10px; /* For standalone buttons */
+}
+#addRequestForm button { margin-top: 5px; }
+
+button:hover {
+    background-color: #166fe5;
+}
+button:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#resetRequests {
+    background-color: #e74c3c;
+}
+#resetRequests:hover {
+    background-color: #c0392b;
+}
+
+#requestList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+#requestList li {
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Visualization Section */
+.disk-track-container {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 30px; /* Space for labels */
+}
+
+#diskTrack {
+    width: 100%;
+    height: 20px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    position: relative; /* For absolute positioning of head and markers */
+    overflow: hidden; /* To clip markers if disk size changes */
+}
+
+#diskHead {
+    width: 10px; /* Width of the head */
+    height: 30px; /* Taller than track */
+    background-color: #dc3545; /* Red */
+    border: 1px solid #c82333;
+    position: absolute;
+    top: -5px; /* Center it vertically over the track */
+    left: 0%; /* Initial position, will be updated by JS */
+    border-radius: 3px;
+    z-index: 10;
+    transition: left 0.5s ease-in-out; /* Animation for movement */
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+#diskHead::after { /* Pointer/Arrow */
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #dc3545;
+}
+
+
+.request-marker {
+    width: 6px;
+    height: 26px; /* Slightly taller than track */
+    background-color: #007bff; /* Blue */
+    position: absolute;
+    top: -3px;
+    border-radius: 2px;
+    z-index: 5;
+    transition: background-color 0.3s ease;
+}
+.request-marker.serviced {
+    background-color: #28a745; /* Green */
+    opacity: 0.7;
+}
+.request-marker.seek-path-segment { /* To mark the path */
+    height: 4px;
+    top: 8px; /* Center in track */
+    background-color: rgba(220, 53, 69, 0.3); /* Semi-transparent red */
+    z-index: 1;
+    transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+}
+
+
+#cylinderLabels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 5px;
+    font-size: 0.8em;
+    color: #555;
+    position: relative; /* To align with diskTrack */
+}
+.cylinder-label {
+    position: absolute;
+    transform: translateX(-50%); /* Center the label */
+}
+
+#currentAction {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    min-height: 1.6em; /* Prevent layout shift */
+}
+
+/* Results Section */
+#servicedOrder {
+    font-weight: bold;
+    color: #1877f2;
+    word-break: break-all;
+}
+#totalHeadMovement {
+    font-weight: bold;
+    color: #e74c3c;
+}
+#movementLog ul {
+    list-style-type: "✓ ";
+    padding-left: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    background: #fdfdfd;
+}
+#movementLog li {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+/* Animation for adding requests */
+@keyframes fadeInListItem {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+#requestList li.new-request {
+    animation: fadeInListItem 0.3s ease-out forwards;
+}
